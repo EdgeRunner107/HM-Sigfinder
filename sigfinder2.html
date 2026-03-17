@@ -2,23 +2,40 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>이미지 검색</title>
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>시그 검색기 </title>
 
 <style>
+/* ▒▒▒ 대리석 다크 테마 배경 ▒▒▒ */
 body{
-  font-family: Arial, sans-serif;
-  text-align:center;
-  padding:20px;
-  margin:0;
-  background:#f9f9f9;
+    font-family: Arial, sans-serif;
+    text-align:center;
+    padding:20px 20px 0 20px; /* bottom padding 제거 */
+    margin:0;
+
+    background: #0d0d0d;
+    background-image:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.06) 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, rgba(255,255,255,0.04) 0%, transparent 40%),
+        repeating-linear-gradient(
+            45deg,
+            rgba(255,255,255,0.05) 0px,
+            rgba(255,255,255,0.05) 2px,
+            rgba(0,0,0,0.1) 2px,
+            rgba(0,0,0,0.1) 6px
+        );
+    background-size: cover;
+    color: #e8e8e8;
+
+    display:block;
+    min-height:auto;
 }
 
 /* 제목 */
 h2{
   font-size:22px;
   margin-bottom:18px;
+  color:#fff;
 }
 
 /* 검색창 */
@@ -27,77 +44,104 @@ input{
   max-width:420px;
   padding:14px;
   font-size:18px;
-  border:1px solid #bbb;
+  border:1px solid #555;
   border-radius:8px;
   margin-bottom:18px;
   outline:none;
+  background:#1a1a1a;
+  color:#eee;
 }
 
 /* 검색 전체 결과 박스 */
 #results{
-  max-width: 500px;       /* 가로폭 제한 */
-  width: 100%;            /* 모바일 대응 */
-  height: 600px;          /* 높이 고정 */
-  overflow-y: auto;       /* 스크롤 생성 */
+  max-width: 500px;
+  width: 100%;
+  height: 400px;
+  overflow-y: auto;
 
-  border:1px solid #ddd;
-  padding:10px;
+  border:1px solid #444;
+  padding:10px 10px 0 10px; /* 하단 패딩 제거 */
 
-  margin-left:auto;       /* 가운데 정렬 */
-  margin-right:auto;
+  background:rgba(255,255,255,0.05);
+  border-radius:12px;
+
+  margin: 0 auto 0 auto; /* 상하 margin 제거 */
 }
-/* 각각의 아이템 */
+
+/* 목록 개별 아이템 */
 .result-item{
-  margin-bottom:24px;
+  margin-bottom:20px;
 }
 
-/* 검색 결과 이미지 (크게 보기) */
+/* 마지막 아이템 하단 공백 제거 */
+.result-item:last-child{
+  margin-bottom:0 !important;
+}
+
+/* 검색된 큰 이미지 */
 .result-img{
   width:100%;
   max-width:250px;
   border-radius:10px;
   display:block;
   margin:auto;
+  border:1px solid #333;
 }
 
 /* 전체 목록 썸네일 */
 .thumb-img{
   width:100%;
-  max-width:250px;
+  max-width:200px;
   border-radius:10px;
   display:block;
-  margin:15px auto;
+  margin:15px auto 5px auto;
+  border:1px solid #333;
 }
 
+/* 파일명 캡션 */
 .caption{
-  margin-top:6px;
-  font-size:17px;
+  margin-top:4px;
+  font-size:15px;
   font-weight:600;
-  color:#222;
+  color:#ddd;
 }
 
-/* 스크롤바 디자인 */
+/* 스크롤바 */
 #results::-webkit-scrollbar {
   width:8px;
 }
 #results::-webkit-scrollbar-thumb {
-  background:#ccc;
+  background:#666;
   border-radius:8px;
 }
 </style>
-
 </head>
+
 <body>
 
-<h2>번호 / 이름 / 태그 검색</h2>
+<h2>HM 시그 검색기</h2>
 
-<input id="search" placeholder="예: 930 / 미스터츄 / 이서냥">
+<input id="search" placeholder="예: 1004 / 천사 / 다나">
 
 <div id="results"></div>
 
 <script>
+/* 여기다가 너의 전체 data 배열 넣으면 됨 */
 const data = [
- 
+
+
+{file:"519 불붙여봐.png", tag:""},
+{file:"572 귀여워서미안해.png", tag:""},
+{file:"724 다정해지는법.png", tag:""},
+{file:"732 키세스.png", tag:""},
+{file:"888 잘한다.png", tag:""},
+{file:"890 캔디.png", tag:""},
+{file:"892 슈퍼맨.png", tag:""},
+{file:"900 뉴페이스.png", tag:""},
+{file:"911 복고댄스.png", tag:""},
+{file:"918 파이팅.png", tag:""},
+{file:"924 이라이라.png", tag:""},
+{file:"928 폼.png", tag:""},
 {file:"930 미스터츄.png", tag:""},
 {file:"931 팬서비스.png", tag:""},
 {file:"933 무아.png", tag:""},
@@ -177,7 +221,7 @@ const data = [
 {file:"1095 클락션.png", tag:""},
 {file:"1096 리버.png", tag:""},
 {file:"1098 띵띵땅땅.png", tag:""},
-{file:"1100 왠지.png", tag:""},
+{file:"1100-왠지.png", tag:""},
 {file:"1102 너뿐이야.png", tag:""},
 {file:"1103 칙칙붐.png", tag:""},
 {file:"1104 펌프업.png", tag:""},
@@ -217,8 +261,10 @@ const data = [
 {file:"1331 립앤힙.png", tag:""},
 {file:"1333 비커즈오브.png", tag:""},
 {file:"1334 바다보러갈래.png", tag:""},
+{file:"1344 다정한계절속에.png", tag:""},
 {file:"1372 야몽음인.png", tag:""},
 {file:"1377 조림댄스.png", tag:""},
+{file:"1388 Bang Bang.png", tag:""},
 {file:"1400 시간을달려서.png", tag:""},
 {file:"1424 다만세.png", tag:""},
 {file:"1442 슈퍼소닉.png", tag:""},
@@ -247,7 +293,7 @@ const data = [
 {file:"1866 주토피아.png", tag:""},
 {file:"1920 스탠딩.png", tag:""},
 {file:"1954 라잌제니.png", tag:""},
-{file:"2000 이천개.png", tag:""},
+{file:"2000.png", tag:""},
 {file:"2001 할것.png", tag:""},
 {file:"2002 썸머필링.png", tag:""},
 {file:"2033 나빌레라.png", tag:""},
@@ -263,11 +309,10 @@ const data = [
 {file:"2182 코카인.png", tag:""},
 {file:"2195 문어신호탄.png", tag:""},
 {file:"2222 호영레이블.png", tag:""},
+{file:"2225 thats a no no.png", tag:""},
 {file:"2255 카운팅스타.png", tag:""},
 {file:"2345 모또하야쿠.png", tag:""},
-{file:"2426 이은신호탄.png", tag:"원이은"},
 {file:"2444 다나신호탄.png", tag:""},
-{file:"2472 혜니신호탄.png", tag:""},
 {file:"2555 not like us.png", tag:""},
 {file:"2556 잔혹한천사의태제.png", tag:""},
 {file:"2777 결혼행진곡.png", tag:""},
@@ -278,20 +323,19 @@ const data = [
 {file:"2864 유나신호탄.png", tag:""},
 {file:"2888 라라라.png", tag:""},
 {file:"2892 여리신호탄.png", tag:""},
-{file:"3000 삼천개.png", tag:""},
+{file:"3000.png", tag:""},
 {file:"3001 너라면좋겠어.png", tag:""},
 {file:"3333 인더클럽.png", tag:""},
 {file:"3344 빠라라.png", tag:""},
-{file:"3708 HM 시그니처1.png", tag:""},
+{file:"3708.png", tag:"시그니처"},
 {file:"4141 누나가.png", tag:""},
 {file:"4444 파티트레인.png", tag:""},
-{file:"5000 오천개.png", tag:""},
+{file:"5000.png", tag:""},
 {file:"5044 다나응원가.png", tag:""},
 {file:"5158 어푸응원가.png", tag:""},
-{file:"5555 HM시그니처2.png", tag:""},
+{file:"5555.png", tag:"시그니처"},
 {file:"5678 부장팀.png", tag:""},
-{file:"5726 이은응원가.png", tag:"원이은"},
-{file:"5742 달리응원가.png", tag:""},
+{file:"5742 달리응원가.png", tag:"윤달리"},
 {file:"5782 오직하리.png", tag:""},
 {file:"5795 문어응원가.png", tag:""},
 {file:"5882 차장팀.png", tag:""},
@@ -301,7 +345,7 @@ const data = [
 {file:"7777 잭팟.png", tag:""},
 {file:"8888 피치스.png", tag:""},
 {file:"9999 핸즈클랩.png", tag:""},
-{file:"10000 만개.png", tag:""},
+{file:"10000.png", tag:""},
 {file:"10002 살아있네.png", tag:""},
 {file:"10005 만개화.png", tag:""},
 {file:"10007 신조사사게요.png", tag:""},
@@ -331,7 +375,6 @@ const data = [
 {file:"10094 강수.png", tag:""},
 {file:"10096 우유.png", tag:""},
 {file:"10109 슈퍼구찌.png", tag:""},
-{file:"10126 슈퍼이은사단.png", tag:"원이은"},
 {file:"10158 슈퍼푸사단.png", tag:"어푸"},
 {file:"10172 드림.png", tag:""},
 {file:"10195 슈퍼문어.png", tag:""},
@@ -342,18 +385,17 @@ const data = [
 {file:"10275 티모.png", tag:""},
 {file:"10288 동도.png", tag:""},
 {file:"10444 슈퍼죽일놈.png", tag:""},
-{file:"10472 슈퍼혜사단.png", tag:"혜니"},
 {file:"10485 슈퍼뱅어.png", tag:""},
 {file:"10550 모옹모옹.png", tag:""},
 {file:"10555 먹보.png", tag:""},
 {file:"10642 달리사단.png", tag:""},
-{file:"10708 HM시그니처4.png", tag:""},
+{file:"10708.png", tag:"시그니처"},
 {file:"10812 단무지.png", tag:""},
 {file:"11002 찬찬히.png", tag:""},
 {file:"11111 포도사랑.png", tag:""},
 {file:"12882 슈퍼하리사단.png", tag:""},
 {file:"13521 반빈.png", tag:""},
-{file:"20000 2만개.png", tag:""},
+{file:"20000.png", tag:""},
 {file:"20982 울트라굿바.png", tag:""},
 {file:"21002 찬찬히.png", tag:""},
 {file:"22882 포에버하플단.png", tag:"하리"},
@@ -361,33 +403,25 @@ const data = [
 {file:"27002 찬찬히.png", tag:""},
 {file:"28258 이팔청춘푸플단.png", tag:"어푸"},
 {file:"29998 대음기.png", tag:""},
-{file:"30000 삼만개.png", tag:""},
-{file:"50000 오만개.png", tag:""},
-{file:"100000 십만개.png", tag:""},
+{file:"30000.png", tag:""},
+{file:"50000.png", tag:""},
+{file:"100000.png", tag:""},
 {file:"100034 영원하자냥플단.png", tag:"이서냥"},
-{file:"200000 이십만개.png", tag:""},
-{file:"300000 삼십만개.png", tag:""},
-{file:"519 불붙여봐.png", tag:""},
-{file:"572 귀여워서미안해.png", tag:""},
-{file:"724 다정해지는법.png", tag:""},
-{file:"732 키세스.png", tag:""},
-{file:"888 잘한다.png", tag:""},
-{file:"890 캔디.png", tag:""},
-{file:"892 슈퍼맨.png", tag:""},
-{file:"900 뉴페이스.png", tag:""},
-{file:"911 복고댄스.png", tag:""},
-{file:"918 파이팅.png", tag:""},
-{file:"924 이라이라.png", tag:""},
-{file:"928 폼.png", tag:""},
-  // ... 여긴 그대로 유지
+{file:"200000.png", tag:""},
+{file:"300000.png", tag:""},
+
+
+
+
+ // … 나머지는 전부 그대로 추가하면 됨
 ];
 
 const input = document.getElementById("search");
 const results = document.getElementById("results");
 
-function showAll() {
+function showAll(){
   results.innerHTML = "";
-  data.forEach(item => {
+  data.forEach(item =>{
     const wrap = document.createElement("div");
     wrap.className = "result-item";
 
@@ -405,12 +439,12 @@ function showAll() {
   });
 }
 
-showAll(); // 처음 전체 목록 출력
+showAll();
 
-input.addEventListener("input", () => {
+/* 검색 기능 */
+input.addEventListener("input", ()=>{
   const value = input.value.trim().toLowerCase();
-
-  if (value === "") {
+  if(value === ""){
     showAll();
     return;
   }
@@ -422,7 +456,7 @@ input.addEventListener("input", () => {
     item.tag.toLowerCase().includes(value)
   );
 
-  matched.slice(0, 5).forEach(item => {
+  matched.slice(0,5).forEach(item =>{
     const wrap = document.createElement("div");
     wrap.className = "result-item";
 
@@ -439,7 +473,6 @@ input.addEventListener("input", () => {
     results.appendChild(wrap);
   });
 
-  // 검색 시 자동으로 스크롤 맨 위로
   results.scrollTop = 0;
 });
 </script>
